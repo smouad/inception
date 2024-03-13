@@ -1,0 +1,10 @@
+version: '3.9'
+
+
+servises:
+  nginx:
+    image: nginx
+  maridb:
+    image: mariadb
+  wordpress:
+    image: wordpress
