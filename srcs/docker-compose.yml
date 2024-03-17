@@ -1,10 +1,15 @@
 version: '3.9'
 
-
 servises:
   nginx:
     image: nginx
   maridb:
     image: mariadb
+    environment:
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PWD: ${DB_PWD}
+      DB_ROOT_PASSWD: ${DB_ROOT_PASSWD}
+
   wordpress:
     image: wordpress
