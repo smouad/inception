@@ -9,5 +9,8 @@ mv wp-cli.phar /usr/local/bin/wp
 cd /var/www/html/wordpress/
 rm -rf /var/www/html/wordpress/*
 
+wp core download --allow-root
+
 chmod -R 775 /var/www/html/wordpress/
 chown -R www-data:www-data /var/www/html/wordpress/
+
