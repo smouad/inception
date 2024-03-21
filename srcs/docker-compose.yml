@@ -2,14 +2,31 @@ version: '3.9'
 
 servises:
   nginx:
-    image: nginx
+    build: ./requirements/nginx
+    container_name: nginx
+    ports:
+      - 443:443
+
   maridb:
-    image: mariadb
+    build: ./requirements/mariadb
+    container_name: mariadb
     environment:
       DB_NAME: ${DB_NAME}
       DB_USER: ${DB_USER}
       DB_PWD: ${DB_PWD}
       DB_ROOT_PASSWD: ${DB_ROOT_PASSWD}
+    volumes:
 
   wordpress:
-    image: wordpress
+    build: ./requirements/wordpress
+    container_name: wordpress
+    environment:
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PWD: ${DB_PWD}
+      DB_ROOT_PASSWD: ${DB_ROOT_PASSWD}
+      WP_USER: ${WP_USER}
+      WP_PWD: ${WP_PWD}
+      WP_EMAIL: ${WP_EMAIL}
+      WP_URL: ${WP_URL}
+    volumes:
