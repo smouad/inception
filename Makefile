@@ -1,27 +1,27 @@
 NAME = inception
 
-all: prepare
-	@printf "Launch configuration ${NAME}...\n"
-	@cd srcs && docker-compose up -d --build
+DOCKER_COMPOSE = docker-compose -p $(NAME) -f srcs/docker-compose.yml
 
-prepare:
+all: mkdir up
+
+mkdir:
+	@echo "Preparing directories..."
 	@mkdir -p /home/msodor/data/wordpress
 	@mkdir -p /home/msodor/data/mariadb
 
-clean: down
-	@printf "Cleaning configuration ${NAME}...\n"
-	@cd srcs && docker-compose down
-	@docker system prune -a
-	@sudo rm -rf /home/msodor/data
+up:
+	@echo "Running containers..."
+	@$(DOCKER_COMPOSE) up -d --build
 
-fclean:
-	@printf "Total clean ${NAME}... \n"
-	@if [ -n "$$(docker ps -qa)" ]; then docker stop $$(docker ps -qa); fi
-	@docker system prune --all --force --volumes
-	@docker network prune --force
-	@docker volume prune --force
-	@sudo rm -rf /home/msodor/data --force
+clean:
+	@echo "Removing containers..."
+	@$(DOCKER_COMPOSE) down
+
+fclean: clean
+	@echo "Cleaning all..."
+	@docker system prune -af
+	@sudo rm -rf /home/msodor/data
 
 re: fclean all
 
-.PHONY: all prepare clean down re fclean
+.PHONY: all mkdir up clean fclean re
