@@ -1,18 +1,13 @@
-FROM alpine:3.19
+FROM debian:bookworm
 
-RUN apk update && apk upgrade && \
-    apk add --no-cache mariadb mariadb-client
+RUN apt update && apt install -y mariadb-server
 
-RUN mkdir -p /run/mysqld && chmod 777 /run/mysqld
-
-RUN sed -i "s|skip-networking|#skip-networking|g" /etc/my.cnf.d/mariadb-server.cnf
-
-COPY ./conf/mariadb.sh /mariadb.sh
-
-RUN mariadb-install-db --user=mysql --datadir=/var/lib/mysql
+RUN mkdir -p /var/run/mysqld && chmod 777 /var/run/mysqld
 
 EXPOSE 3306
 
+COPY ./conf/mariadb.sh /mariadb.sh
+
 ENTRYPOINT ["sh", "mariadb.sh"]
 
-CMD ["mariadbd", "--user=mysql", "--bind-address=0.0.0.0"]
+CMD ["mariadbd", "--user=root", "--bind-address=0.0.0.0"]

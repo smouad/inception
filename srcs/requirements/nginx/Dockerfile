@@ -1,17 +1,15 @@
-FROM alpine:3.19
+FROM debian:bookworm
 
-RUN apk update && \
-    apk add --no-cache nginx && \
-    apk add --no-cache openssl
+RUN apt update && apt install nginx -y \
+    && apt install -y openssl
 
-RUN openssl req -x509 \
-    -nodes -days 365 \
-    -newkey rsa:2048 \
-    -keyout /etc/ssl/private/msodor.key \
-    -out /etc/ssl/certs/msodor.crt \
+RUN mkdir -p /etc/nginx/ssl \
+    && openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+    -keyout /etc/nginx/ssl/msodor.42.fr.key \
+    -out /etc/nginx/ssl/msodor.42.fr.crt  \
     -subj "/C=MA/L=Tetouan/O=42/OU=1337/CN=msodor.42.fr"
 
-COPY ./conf/nginx.conf /etc/nginx/http.d/nginx.conf
+COPY ./conf/nginx.conf /etc/nginx/conf.d/nginx.conf
 
 EXPOSE 443
 
